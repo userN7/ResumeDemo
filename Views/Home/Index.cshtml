@@ -1,0 +1,53 @@
+﻿@{
+	ViewData["Title"] = "Home Page";
+}
+@model DateTime
+@using System.IO;
+@using System.Globalization;
+@using static pluritechDemo.Models.Consts
+	@{		
+		var appDataPath = (string)ViewData["App_Data_Path"];
+		string[] allfiles = Directory.GetFiles(appDataPath);		
+	}
+	<div class="container-fluid" >
+		<div class="row p-2">
+			@*left bar*@
+			<div class="col-2 grayColumn">
+				Welcome, @Context.User.Identity.Name
+				<br />
+				<a asp-controller="Account" asp-action="Logout">Sign-out</a>
+				<br />
+				<br />
+				<br />
+				<div>
+					@foreach (string filePath in allfiles)
+					{
+						var fileSize = (new FileInfo(filePath)).GetFileSize();
+						var fileName = filePath.Split("\\").Last();
+						<a asp-action="Download" asp-route-fileName="@fileName">@fileName (@fileSize)</a>
+						<br />
+
+					}
+				</div>
+			</div>
+			@*center bar*@
+					<div class="col-4 yellowColumn">
+						<div class="smileContainer text-center">
+							<img class="hidden-block smile" id="smileImg" src="~/pics/smile.png" />
+							<img class="hidden-block leftEye" onmouseover="HideEye(event)" onmouseout="ShowEye(event)" id="leftEyeImg" src="~/pics/eye.png" />
+							<img class="hidden-block rightEye" onmouseover="HideEye(event)" onmouseout="ShowEye(event)" id="rightEyeImg" src="~/pics/eye.png" />
+						</div>
+						<div class="smileSpaceHolder"></div>
+						@Html.Raw(largeText);
+					</div>
+			@*right bar*@
+					<div class="col-2 greenColumn">
+								<div id="DateSelector" name="DateSelector">
+									@Html.PartialAsync("DateSelector").Result
+								</div>
+								<button onclick="LoadData(1)"  class="btn btn-primary">Get date from server</button>
+						</div>
+
+				</div>
+			
+	</div>

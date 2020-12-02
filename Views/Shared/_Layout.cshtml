@@ -1,0 +1,108 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - pluritechDemo</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+	<style>
+
+		.smileSpaceHolder {
+		height: 180px;		
+		}
+		.smileContainer {
+			position: absolute;
+			margin-top: 10px;			
+			left: 30%;
+		}
+		.smile {
+			position: inherit;
+			left: 0px;
+			top: 0px;
+			z-index: 1;
+		}
+		.leftEye {
+			position: inherit;
+			z-index: 2;
+			/*left: 53px;
+			top: 43px;*/
+			/*left: -125px;
+			top: -21px;*/
+			left: 38px;
+			top: 43px;
+			transition: 8s;
+		}
+		.rightEye {
+			position: inherit;
+			z-index: 2;
+			left: 106px;
+			top: 43px;			
+			transition: 8s;
+		}
+		
+		.grayColumn {
+			display: block;
+			height: 1000px;
+			width: 500px;
+			background: #D1D1D1;
+			border-right: solid 3px;
+			margin-left: 100px;
+		}
+
+		.yellowColumn {
+			display: block;
+			height: 1000px;
+			width: 500px;
+			background: #F9FA73;
+		}
+
+		.greenColumn {
+			display: block;
+			height: 1000px;
+			width: 500px;
+			background: #DAFFCC;
+			margin-right: 100px;
+			border-left: solid 2px;
+		}
+
+		.hidden-block {
+			opacity: 0; /*Элемент полностью прозрачный (невидимый)*/
+			transition: 8s; /*Скорость перехода состояния элемента*/
+		}
+
+
+		select {
+			width: 100px;
+		}
+				
+	</style>
+</head>
+<body onload="ChangeOpacity(event)">
+	@RenderBody()
+
+
+
+
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="~/lib/jquery/"></script>
+	<script>
+		function ChangeOpacity(event) {
+			var smile = document.getElementById('smileImg');
+			smile.style.opacity = "1";
+			document.getElementById('leftEyeImg').style.opacity = "1";
+			document.getElementById('rightEyeImg').style.opacity = "1";
+			
+		}
+		function HideEye(event) {
+			event.target.style.opacity = "0";
+		}
+		function ShowEye(event) {			
+			event.target.style.opacity = "1";
+		}
+		
+	</script>
+	@RenderSection("Scripts", required: false)
+</body>
+</html>

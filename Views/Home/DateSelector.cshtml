@@ -1,0 +1,91 @@
+﻿
+@using System.Globalization;
+@using static pluritechDemo.Models.Consts
+@model DateTime
+@{
+	CultureInfo cinfo = CultureInfo.CreateSpecificCulture("en-EN");
+	var MonthNames = cinfo.DateTimeFormat.MonthNames.ToList().Select((d, index) => new { monthNum = index + 1, monthName = d }).ToDictionary(m => m.monthNum, m => m.monthName);
+
+	var yearList = new List<int>();
+	var currYear = Model.Year;
+	var currMonth = cinfo.DateTimeFormat.GetMonthName(Model.Month);
+	var currDay = Model.Day;
+	var daysCount = DateTime.DaysInMonth(Model.Year, Model.Month);
+	for (int i = 0; i < 10; i++)
+	{
+		yearList.Add(DateTime.Now.Year - i);
+	}
+
+}
+<div  onchange="LoadData()">
+	<select name="yearSelector" id="yearSelector">
+		@foreach (var year in yearList)
+		{
+			@Html.Raw(@"<option value=""" + year + @"""" + (year == currYear ? " selected " : "") + ">" + year + "</option>");
+		}
+	</select>
+	<br />
+	<select name="monthSelector" id="monthSelector">
+		@foreach (var month in MonthNames)
+		{
+			@Html.Raw(@"<option value=""" + month.Key + @"""" + (month.Value == currMonth ? " selected " : "") + ">" + month.Value + "</option>");
+		}
+	</select>
+	<br />
+	<select name="daySelector" id="daySelector">
+		@for (int day = 1; day <= daysCount; day++)
+		{
+			@Html.Raw(@"<option value=""" + day + @"""" + (day == currDay ? " selected " : "") + ">" + day + "</option>");
+		}
+
+	</select>
+	<br />
+	<label>
+		@Model.ToString("dddd",
+	new CultureInfo("en-EN"))
+	</label>
+	</div>
+<script>
+	//var days = [
+	//	'Sunday',
+	//	'Monday',
+	//	'Tuesday',
+	//	'Wednesday',
+	//	'Thursday',
+	//	'Friday',
+	//	'Saturday'
+	//];
+	//var d = new Date();
+	//var n = d.getDay();
+	RecalcDay = function (event) {
+		document.forms["DateForm"].submit();
+	}
+
+	function LoadData(isServerTime) {
+        
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetDateFromServer")',			
+			data: {
+				yearSelector: $('#yearSelector').val(),
+				monthSelector: $('#monthSelector').val(),
+				daySelector: $('#daySelector').val(),
+				isServerTime: isServerTime
+			},
+			success: function (data) {
+				var verificando = $('#DateSelector').html();
+				if (verificando != data) {
+					$('#DateSelector').html(data);
+				}			
+				              
+            },
+            error: function (ex) {
+                var r = jQuery.parseJSON(response.responseText);
+                alert("Message: " + r.Message);
+                alert("StackTrace: " + r.StackTrace);
+                alert("ExceptionType: " + r.ExceptionType);
+            }
+        });
+        return false;
+    }
+</script>
